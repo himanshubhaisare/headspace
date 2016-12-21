@@ -35,9 +35,9 @@ public class BookService {
             if (author.getBook() == null) {
                 if (Luhn.validate(args[1])) {
                     book = new Book(args[1], author);
-                    Database.setCard(book);
+                    Database.setBook(book);
                     author.setBook(book);
-                    Database.setUser(author);
+                    Database.setAuthor(author);
                 } else {
                     result = Error.CARD_NUMBER_INVALID;
                 }

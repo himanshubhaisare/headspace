@@ -15,19 +15,21 @@ public class LibraryApplication {
         AuthorService authorService = new AuthorService();
         BookService bookService = new BookService();
         Library library = new Library(authorService, bookService);
-		System.out.println("Welcome to your library!\n");
+		System.out.println("Welcome to your library!\n\n> ");
 		String input = "";
-		while (!input.equals("close")) {
+		while (!input.equals("quit")) {
 			Scanner scanner = new Scanner(System.in);
 			input = scanner.nextLine();
 			if (input.equals("help")) {
-				System.out.println("user <name> : to create a user. e.g. user Himanshu \n" +
-						"add <user> <card number> : to add a credit card on user. e.g. add Himanshu 5555555555554444 \n" +
-						"balance <user> : to view balance of a user e.g. balance Himanshu \n" +
-						"pay <actor> <target> <$amount> <note> : pay someone e.g. pay Himanshu Lisa $10.50 for coffee \n" +
-						"feed <user> : shows activity feed of a user e.g. feed Himanshu \n" +
-						"help : brings up manual \n" +
-						"close : closes library \n");
+				System.out.println(
+						"add \"$title\" \"$author\": adds a book to the library with the given title and author. All books are unread by default.\n" +
+						"read \"$title\": marks a given book as read.\n" +
+						"show all: displays all of the books in the library\n" +
+						"show unread: display all of the books that are unread\n" +
+						"show all by \"$author\": shows all of the books in the library by the given author.\n" +
+						"show unread by \"$author\": shows the unread books in the library by the given author\n" +
+						"undo: undoes the last mutational command (if a book was marked as read it marks it as unread; if a book was added, it gets removed)\n" +
+						"quit: quits the program.");
 			} else {
 				String result = library.handle(input);
 				System.out.print(result);

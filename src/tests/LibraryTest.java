@@ -2,12 +2,11 @@ package tests;
 
 import constants.Error;
 import database.Database;
-import resource.Book;
 import resource.Author;
+import resource.Book;
 import service.Library;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LibraryTest {
@@ -50,7 +49,6 @@ public class LibraryTest {
     private void clear() {
         Database.setAuthors(new HashMap<String, Author>());
         Database.setBooks(new HashMap<String, Book>());
-        Database.setPayments(new ArrayList<Payment>());
     }
 
     /**
