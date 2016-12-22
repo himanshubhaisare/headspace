@@ -59,8 +59,7 @@ public class Library {
                         result = this.bookService.create(args);
                         break;
                     case Command.SHOW_ALL:
-                        result = this.authorService.retrieve(args);
-						result += "\n> ";
+                        result = this.bookService.retrieve(args);
                         break;
                     case Command.SHOW_ALL_BY:
                         result = this.authorService.create(args);
@@ -79,7 +78,6 @@ public class Library {
 						break;
                     default:
                         result = COMMAND_NOT_RECOGNIZED;
-						result += "\n> ";
                         break;
                 }
             }

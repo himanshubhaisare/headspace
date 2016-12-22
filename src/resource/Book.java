@@ -38,4 +38,12 @@ public class Book {
 		this.read = read;
 	}
 
+	public String getStatus() {
+		String status = "unread";
+		if (this.read) {
+			return "read";
+		}
+		return status;
+	}
+
 }
