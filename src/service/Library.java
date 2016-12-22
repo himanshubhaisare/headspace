@@ -71,7 +71,7 @@ public class Library {
 						result = this.authorService.create(args);
 						break;
 					case Command.READ:
-						result = this.authorService.create(args);
+						result = this.bookService.read(args);
 						break;
 					case Command.UNDO:
 						result = this.authorService.create(args);

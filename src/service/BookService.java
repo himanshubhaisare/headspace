@@ -5,8 +5,8 @@ import database.Database;
 import resource.Author;
 import resource.Book;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class BookService {
 
@@ -50,7 +50,7 @@ public class BookService {
 	 */
 	public String retrieve(String[] args) {
 		String result = "";
-		Map<String, Book> books = new TreeMap<String, Book>();
+		Map<String, Book> books = new HashMap<>();
 		if (args.length == 0) {
 			books = Database.getBooks();
 		}
@@ -66,5 +66,26 @@ public class BookService {
 
 	public String retrieveOne(String[] args) {
 		return null;
+	}
+
+	/**
+	 * Mark a book as read
+	 *
+	 * @param args
+	 * @return
+	 */
+	public String read(String[] args) {
+		String result = "";
+		if (args.length < 1) {
+			result = Error.INVALID_ARGS;
+			return result;
+		}
+
+		Book book = Database.getBook(args[0]);
+		book.setRead(true);
+		Database.addBook(book);
+
+		result = String.format("\n\"%s\" by %s marked as read\n\n> ", book.getTitle(), book.getAuthor().getName());
+		return result;
 	}
 }
