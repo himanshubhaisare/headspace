@@ -29,7 +29,7 @@ public class Library {
      * @param input
      */
     public String handle(String input) {
-        String result;
+        String result = "";
         String[] inputs = input.split(" ");
         if (inputs.length < 1) {
             result = INVALID_ARGS;
@@ -38,32 +38,51 @@ public class Library {
             String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
             if (command == null) {
                 result = COMMAND_NOT_RECOGNIZED;
+				result += "\n";
             } else {
                 switch (command) {
+					case Command.HELP:
+						result = "add \"$title\" \"$author\": adds a book to the library with the given title and author. All books are unread by default.\n" +
+								"read \"$title\": marks a given book as read.\n" +
+								"show all: displays all of the books in the library\n" +
+								"show unread: display all of the books that are unread\n" +
+								"show all by \"$author\": shows all of the books in the library by the given author.\n" +
+								"show unread by \"$author\": shows the unread books in the library by the given author\n" +
+								"undo: undoes the last mutational command (if a book was marked as read it marks it as unread; if a book was added, it gets removed)\n" +
+								"quit: quits the program.\n\n> ";
+						break;
+					case Command.QUIT:
+						result = "\nBye!\n";
+						break;
                     case Command.ADD:
                         result = this.bookService.create(args);
                         break;
-                    case Command.BALANCE:
+                    case Command.SHOW_ALL:
                         result = this.authorService.showBalance(args);
-						result += "\n";
+						result += "\n> ";
                         break;
-                    case Command.USER:
+                    case Command.SHOW_ALL_BY:
                         result = this.authorService.create(args);
                         break;
+					case Command.SHOW_UNREAD:
+						result = this.authorService.create(args);
+						break;
+					case Command.SHOW_UNREAD_BY:
+						result = this.authorService.create(args);
+						break;
+					case Command.READ:
+						result = this.authorService.create(args);
+						break;
+					case Command.UNDO:
+						result = this.authorService.create(args);
+						break;
                     default:
                         result = COMMAND_NOT_RECOGNIZED;
+						result += "\n> ";
                         break;
                 }
             }
         }
-
-		if(result.equals(COMMAND_NOT_RECOGNIZED) || result.equals(INVALID_ARGS) ||
-				result.equals(USER_ALREADY_HAS_CARD) || result.equals(CARD_BELONGS_TO_ANOTHER_USER) ||
-				result.equals(USER_NOT_FOUND) || result.equals(ACTOR_NOT_FOUND) || result.equals(TARGET_NOT_FOUND) ||
-				result.equals(CARD_NOT_FOUND) || result.equals(USERNAME_INVALID) || result.equals(CARD_NUMBER_INVALID) ||
-				result.equals(CANNOT_PAY_SELF)) {
-			result += "\n";
-		}
 
         return result;
     }
