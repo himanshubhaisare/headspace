@@ -32,11 +32,11 @@ public class BookService {
         }
 
         if (book == null) {
-            if (author.getBook() == null) {
+            if (author.getBooks() == null) {
                 if (Luhn.validate(args[1])) {
                     book = new Book(args[1], author);
                     Database.setBook(book);
-                    author.setBook(book);
+                    author.addBook(book);
                     Database.setAuthor(author);
                 } else {
                     result = Error.CARD_NUMBER_INVALID;

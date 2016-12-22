@@ -13,7 +13,7 @@ public class Library {
     private BookService bookService;
 
     /**
-     * Library Application runs with user, card and payment services
+     * Library Application runs with Author and Book services
 	 *
      * @param authorService
      * @param bookService
@@ -42,13 +42,13 @@ public class Library {
             } else {
                 switch (command) {
 					case Command.HELP:
-						result = "add \"$title\" \"$author\": adds a book to the library with the given title and author. All books are unread by default.\n" +
-								"read \"$title\": marks a given book as read.\n" +
+						result = "add \"$title\" \"$author\": adds a books to the library with the given title and author. All books are unread by default.\n" +
+								"read \"$title\": marks a given books as read.\n" +
 								"show all: displays all of the books in the library\n" +
 								"show unread: display all of the books that are unread\n" +
 								"show all by \"$author\": shows all of the books in the library by the given author.\n" +
 								"show unread by \"$author\": shows the unread books in the library by the given author\n" +
-								"undo: undoes the last mutational command (if a book was marked as read it marks it as unread; if a book was added, it gets removed)\n" +
+								"undo: undoes the last mutational command (if a books was marked as read it marks it as unread; if a books was added, it gets removed)\n" +
 								"quit: quits the program.\n\n> ";
 						break;
 					case Command.QUIT:
@@ -58,7 +58,7 @@ public class Library {
                         result = this.bookService.create(args);
                         break;
                     case Command.SHOW_ALL:
-                        result = this.authorService.showBalance(args);
+                        result = this.authorService.retrieve(args);
 						result += "\n> ";
                         break;
                     case Command.SHOW_ALL_BY:

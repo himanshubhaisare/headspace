@@ -5,13 +5,12 @@ import database.Database;
 import resource.Author;
 import validator.Username;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 
 public class AuthorService {
 
     /**
-     * Validate and create a user
+     * Validate and create a Author
      *
      * @param args
      * @return
@@ -35,28 +34,13 @@ public class AuthorService {
         return result;
     }
 
-    /**
-     * Show user's balance
-     *
-     * @param args
-     * @return
-     */
-    public String showBalance(String[] args) {
-        String result;
-        BigDecimal balance;
-        if (args.length < 1) {
-            result = Error.INVALID_ARGS;
-            return result;
-        }
-
-        Author author = Database.getAuthor(args[0]);
-        if (author == null) {
-            result = Error.USER_NOT_FOUND;
-        } else {
-            balance = author.getBalance();
-            result = "$"+balance.toString();
-        }
-
-        return result;
-    }
+	/**
+	 * Return all authors
+	 *
+	 * @param args
+	 * @return
+	 */
+	public String retrieve(String[] args) {
+		return null;
+	}
 }

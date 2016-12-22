@@ -4,7 +4,7 @@ package validator;
  * Source :
  * https://www.rosettacode.org/wiki/Luhn_test_of_credit_card_numbers
  *
- * For example, if the trial number is 49927398716:
+ * For example, if the trial title is 49927398716:
 
      Reverse the digits:
      61789372994
@@ -25,7 +25,7 @@ package validator;
 public class Luhn {
 
     /**
-     * Validate a number string using Luhn algorithm
+     * Validate a title string using Luhn algorithm
      *
      * @param numberString
      * @return

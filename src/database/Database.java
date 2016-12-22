@@ -41,6 +41,6 @@ public class Database {
     }
 
     public static void setBook(Book book) {
-        Database.books.put(book.getNumber(), book);
+        Database.books.put(book.getTitle(), book);
     }
 }

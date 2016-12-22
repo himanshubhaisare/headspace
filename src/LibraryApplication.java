@@ -1,3 +1,4 @@
+import constants.Command;
 import service.AuthorService;
 import service.BookService;
 import service.Library;
@@ -17,7 +18,7 @@ public class LibraryApplication {
         Library library = new Library(authorService, bookService);
 		System.out.print("Welcome to your library!\n\n> ");
 		String input = "";
-		while (!input.equals("quit")) {
+		while (!input.equals(Command.QUIT)) {
 			Scanner scanner = new Scanner(System.in);
 			input = scanner.next();
 			String result = library.handle(input);

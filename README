@@ -12,7 +12,7 @@ mini library supports two modes of execution. `cd` into the directory where you 
     library started in interactive mode. Enter help to see manual.
     > help
     user <name> : to create a user. e.g. user Himanshu
-    add <user> <card number> : to add a credit card on user. e.g. add Himanshu 5555555555554444 
+    add <user> <card title> : to add a credit card on user. e.g. add Himanshu 5555555555554444 
     balance <user> : to view balance of a user e.g. balance Himanshu 
     pay <actor> <target> <$amount> <note> : pay someone e.g. pay Himanshu Lisa $10.50 for coffee 
     feed <user> : shows activity feed of a user e.g. feed Himanshu 

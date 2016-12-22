@@ -272,7 +272,7 @@ public class LibraryTest {
         library.handle("add Milana 4111111111111111");
         library.handle("pay Himanshu Milana $10.50 for not doing dishes");
         Author himanshu = Database.getAuthor("Himanshu");
-        Book book = himanshu.getBook();
+        Book book = himanshu.getBooks();
         if (book.getCharge().equals(new BigDecimal("10.50"))) {
             System.out.println(CHARGE_ON_CARD_AFTER_PAYMENT+" : PASS");
         } else {

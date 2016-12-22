@@ -1,27 +1,22 @@
 package resource;
 
-import java.math.BigDecimal;
-
 public class Book {
 
-    public String number;
+    public String title;
 
     public Author author;
 
-    public BigDecimal charge;
-
-    public Book(String number, Author author) {
-        this.number = number;
+    public Book(String title, Author author) {
+        this.title = title;
         this.author = author;
-        this.charge = BigDecimal.ZERO;
     }
 
-    public String getNumber() {
-        return number;
+    public String getTitle() {
+        return title;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Author getAuthor() {
@@ -30,13 +25,5 @@ public class Book {
 
     public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    public BigDecimal getCharge() {
-        return charge;
-    }
-
-    public void setCharge(BigDecimal charge) {
-        this.charge = charge;
     }
 }

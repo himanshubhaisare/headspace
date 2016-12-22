@@ -1,18 +1,15 @@
 package resource;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 public class Author {
 
     public String name;
 
-    public BigDecimal balance;
-
-    public Book book;
+	public List<Book> books;
 
     public Author(String name) {
         this.name = name;
-        this.balance = BigDecimal.ZERO;
     }
 
     public String getName() {
@@ -23,19 +20,15 @@ public class Author {
         this.name = name;
     }
 
-    public Book getBook() {
-        return book;
-    }
+	public List<Book> getBooks() {
+		return books;
+	}
 
-    public void setBook(Book book) {
-        this.book = book;
-    }
+	public void setBooks(List<Book> books) {
+		this.books = books;
+	}
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
+	public void addBook(Book book) {
+		this.books.add(book);
+	}
 }
