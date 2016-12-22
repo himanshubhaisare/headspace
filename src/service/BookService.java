@@ -2,9 +2,8 @@ package service;
 
 import constants.Error;
 import database.Database;
-import resource.Book;
 import resource.Author;
-import validator.Luhn;
+import resource.Book;
 
 public class BookService {
 
@@ -12,7 +11,7 @@ public class BookService {
     }
 
     /**
-     * Create card
+     * Add book in the library
      *
      * @param args
      * @return
@@ -24,29 +23,17 @@ public class BookService {
             result = Error.INVALID_ARGS;
             return result;
         }
-        Author author = Database.getAuthor(args[0]);
-        book = Database.getBook(args[1]);
-        if (author == null) {
-            result = Error.USER_NOT_FOUND;
-            return result;
-        }
 
-        if (book == null) {
-            if (author.getBooks() == null) {
-                if (Luhn.validate(args[1])) {
-                    book = new Book(args[1], author);
-                    Database.setBook(book);
-                    author.addBook(book);
-                    Database.setAuthor(author);
-                } else {
-                    result = Error.CARD_NUMBER_INVALID;
-                }
-            } else {
-                result = Error.USER_ALREADY_HAS_CARD;
-            }
-        } else {
-            result = Error.CARD_BELONGS_TO_ANOTHER_USER;
-        }
+        Author author = Database.getAuthor(args[0]);
+		if (author == null) {
+			author = new Author(args[0]);
+		}
+
+		book = new Book(args[1], author);
+		author.addBook(book);
+
+		Database.addBook(book);
+		Database.addAuthor(author);
 
         return result;
     }

@@ -20,7 +20,7 @@ public class LibraryApplication {
 		String input = "";
 		while (!input.equals(Command.QUIT)) {
 			Scanner scanner = new Scanner(System.in);
-			input = scanner.next();
+			input = scanner.nextLine();
 			String result = library.handle(input);
 			System.out.print(result);
 		}

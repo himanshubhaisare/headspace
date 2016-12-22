@@ -3,7 +3,6 @@ package service;
 import constants.Error;
 import database.Database;
 import resource.Author;
-import validator.Username;
 
 import java.util.Arrays;
 
@@ -24,12 +23,9 @@ public class AuthorService {
         }
 
         String name = Utils.concatenate(Arrays.copyOfRange(args, 0, args.length));
-        if (Username.validate(name)) {
-            author = new Author(name);
-            Database.setAuthor(author);
-        } else {
-            result = Error.USERNAME_INVALID;
-        }
+		author = new Author(name);
+		Database.addAuthor(author);
+
 
         return result;
     }

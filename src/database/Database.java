@@ -24,7 +24,7 @@ public class Database {
         return authors.get(name);
     }
 
-    public static void setAuthor(Author author) {
+    public static void addAuthor(Author author) {
         Database.authors.put(author.getName(), author);
     }
 
@@ -40,7 +40,7 @@ public class Database {
         Database.books = books;
     }
 
-    public static void setBook(Book book) {
+    public static void addBook(Book book) {
         Database.books.put(book.getTitle(), book);
     }
 }

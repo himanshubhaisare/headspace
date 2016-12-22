@@ -4,7 +4,8 @@ import constants.Command;
 
 import java.util.Arrays;
 
-import static constants.Error.*;
+import static constants.Error.COMMAND_NOT_RECOGNIZED;
+import static constants.Error.INVALID_ARGS;
 
 public class Library {
 
@@ -30,15 +31,15 @@ public class Library {
      */
     public String handle(String input) {
         String result = "";
-        String[] inputs = input.split(" ");
+        String[] inputs = input.split(" \"");
         if (inputs.length < 1) {
             result = INVALID_ARGS;
         } else {
             String command = inputs[0];
             String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
-            if (command == null) {
+			args = Arrays.stream(args).map(s -> s.replace("\"", "")).toArray(String[]::new);
+			if (command == null) {
                 result = COMMAND_NOT_RECOGNIZED;
-				result += "\n";
             } else {
                 switch (command) {
 					case Command.HELP:

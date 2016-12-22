@@ -6,7 +6,6 @@ import resource.Author;
 import resource.Book;
 import service.Library;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class LibraryTest {
@@ -62,8 +61,6 @@ public class LibraryTest {
         // 1. user will create a new user
         testCreateUserWithoutName();
         testCreateUserWithName();
-        testCreateUserWithLongerName();
-        testCreateUserWithShorterName();
         testCreateUserWithUnderscoreName();
         testCreateUserWithDashName();
         testCreateUserWithAlphanumericName();
@@ -72,10 +69,8 @@ public class LibraryTest {
         testAddCardWithoutUser();
         testAddCardOnNonExistingUser();
         testAddCardWithUser();
-        testAddNonLuhnCard();
         testAddSecondCardOnUser();
         testAddAnotherUsersCard();
-        testChargeOnCardAfterMakingPayment();
 
         // 3. balance shows user's balance
         testBalanceWithoutUser();
@@ -87,9 +82,7 @@ public class LibraryTest {
         // 4. pay makes a payment from actor to target
         testPaymentWithoutArgs();
         testPaymentWithoutNotes();
-        testPaymentToYourself();
         testPaymentWithoutCard();
-        testPaymentWithActorTargetAmountNotes();
 
         // 5. feed shows activity feed of the user
         testFeedWithoutArgs();
@@ -120,7 +113,7 @@ public class LibraryTest {
 
     private void testFeedWithoutUser() {
         String result = library.handle("feed Himanshu");
-        if (result.equals(Error.USER_NOT_FOUND)) {
+        if (result.equals(Error.AUTHOR_NOT_FOUND)) {
             System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : PASS");
         } else {
             System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : FAIL");
@@ -136,44 +129,14 @@ public class LibraryTest {
         }
     }
 
-    private void testPaymentWithActorTargetAmountNotes() {
-        library.handle("user Himanshu");
-        library.handle("add Himanshu 5454545454545454");
-        library.handle("user Milana");
-        library.handle("add Milana 4111111111111111");
-        library.handle("pay Milana Himanshu $0.10 for being a good husband");
-        Author himanshu = Database.getAuthor("Himanshu");
-
-        if (himanshu.getBalance().equals(new BigDecimal("0.10"))) {
-            System.out.println(MAKE_PAYMENT+" : PASS");
-        } else {
-            System.out.println(MAKE_PAYMENT+" : FAIL");
-        }
-
-        clear();
-    }
-
     private void testPaymentWithoutCard() {
         library.handle("user Himanshu");
         library.handle("user Milana");
         String result = library.handle("pay Himanshu Milana $10.50 for breaking glass jar");
-        if (result.equals(Error.CARD_NOT_FOUND)) {
+        if (result.equals(Error.TITLE_NOT_FOUND)) {
             System.out.println(MAKE_PAYMENT_WITHOUT_CARD+" : PASS");
         } else {
             System.out.println(MAKE_PAYMENT_WITHOUT_CARD+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testPaymentToYourself() {
-        library.handle("user Himanshu");
-        library.handle("add Himanshu 5454545454545454");
-        String result = library.handle("pay Himanshu Himanshu $10.50 for looper");
-        if (result.equals(Error.CANNOT_PAY_SELF)) {
-            System.out.println(MAKE_PAYMENT_TO_SELF+" : PASS");
-        } else {
-            System.out.println(MAKE_PAYMENT_TO_SELF+" : FAIL");
         }
 
         clear();
@@ -249,7 +212,7 @@ public class LibraryTest {
 
     private void testBalanceOnNonExistingUser() {
         String result = library.handle("balance Himanshu");
-        if (result.contains(Error.USER_NOT_FOUND)) {
+        if (result.contains(Error.AUTHOR_NOT_FOUND)) {
             System.out.println(CHECK_BALANCE_USER_NOT_FOUND+" Himanshu : PASS");
         } else {
             System.out.println(CHECK_BALANCE_USER_NOT_FOUND+" Himanshu : FAIL");
@@ -265,29 +228,12 @@ public class LibraryTest {
         }
     }
 
-    private void testChargeOnCardAfterMakingPayment() {
-        library.handle("user Himanshu");
-        library.handle("add Himanshu 5454545454545454");
-        library.handle("user Milana");
-        library.handle("add Milana 4111111111111111");
-        library.handle("pay Himanshu Milana $10.50 for not doing dishes");
-        Author himanshu = Database.getAuthor("Himanshu");
-        Book book = himanshu.getBooks();
-        if (book.getCharge().equals(new BigDecimal("10.50"))) {
-            System.out.println(CHARGE_ON_CARD_AFTER_PAYMENT+" : PASS");
-        } else {
-            System.out.println(CHARGE_ON_CARD_AFTER_PAYMENT+" : FAIL");
-        }
-
-        clear();
-    }
-
     private void testAddAnotherUsersCard() {
         library.handle("user Himanshu");
         library.handle("add Himanshu 5454545454545454");
         library.handle("user Milana");
         String result = library.handle("add Milana 5454545454545454");
-        if (result.contains(Error.CARD_BELONGS_TO_ANOTHER_USER)) {
+        if (result.contains(Error.TITLE_BELONGS_TO_ANOTHER_AUTHOR)) {
             System.out.println(ADD_ANOTHER_USERS_CARD+" Milana 5454545454545454 : PASS");
         } else {
             System.out.println(ADD_ANOTHER_USERS_CARD+" Milana 5454545454545454 : FAIL");
@@ -300,22 +246,10 @@ public class LibraryTest {
         library.handle("user Himanshu");
         library.handle("add Himanshu 5454545454545454");
         String result = library.handle("add Himanshu 4111111111111111");
-        if (result.contains(Error.USER_ALREADY_HAS_CARD)) {
+        if (result.contains(Error.AUTHOR_ALREADY_HAS_BOOK)) {
             System.out.println(ADD_SECOND_CARD+" Himanshu 4111111111111111 : PASS");
         } else {
             System.out.println(ADD_SECOND_CARD+" Himanshu 4111111111111111 : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testAddNonLuhnCard() {
-        library.handle("user Himanshu");
-        String result = library.handle("add Himanshu 1234567890123456");
-        if (result.contains(Error.CARD_NUMBER_INVALID)) {
-            System.out.println(ADD_NON_LUHN_CARD+" Himanshu 1234567890123456 : PASS");
-        } else {
-            System.out.println(ADD_NON_LUHN_CARD+" Himanshu 1234567890123456 : FAIL");
         }
 
         clear();
@@ -336,7 +270,7 @@ public class LibraryTest {
 
     private void testAddCardOnNonExistingUser() {
         String result = library.handle("add Himanshu 5454545454545454");
-        if (result.contains(Error.USER_NOT_FOUND)) {
+        if (result.contains(Error.AUTHOR_NOT_FOUND)) {
             System.out.println(ADD_CARD_ON_NON_EXISTING_USER+" Himanshu : PASS");
         } else {
             System.out.println(ADD_CARD_ON_NON_EXISTING_USER+" Himanshu : FAIL");
@@ -381,24 +315,6 @@ public class LibraryTest {
 
         // clear database
         clear();
-    }
-
-    private void testCreateUserWithLongerName() {
-        String result = library.handle("user HimanshuVasantBhaisareIsMyFullName");
-        if (result.contains(Error.USERNAME_INVALID)) {
-            System.out.println(CREATE_USER_WITH_LONGER_NAME+" HimanshuVasantBhaisareIsMyFullName : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_LONGER_NAME+" HimanshuVasantBhaisareIsMyFullName : FAIL");
-        }
-    }
-
-    private void testCreateUserWithShorterName() {
-        String result = library.handle("user Him");
-        if (result.contains(Error.USERNAME_INVALID)) {
-            System.out.println(CREATE_USER_WITH_SHORTER_NAME+" Him : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_SHORTER_NAME+" Him : FAIL");
-        }
     }
 
     private void testCreateUserWithUnderscoreName() {

@@ -6,9 +6,12 @@ public class Book {
 
     public Author author;
 
+	public Boolean read;
+
     public Book(String title, Author author) {
         this.title = title;
         this.author = author;
+		this.read = false;
     }
 
     public String getTitle() {
@@ -26,4 +29,13 @@ public class Book {
     public void setAuthor(Author author) {
         this.author = author;
     }
+
+	public Boolean getRead() {
+		return read;
+	}
+
+	public void setRead(Boolean read) {
+		this.read = read;
+	}
+
 }
