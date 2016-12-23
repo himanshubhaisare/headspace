@@ -27,15 +27,19 @@ To start library in interactive mode just type `./library`
     
 ## Design decisions
 
-1. After reading the requirements and the list of input, output; I realized that there are three main resources
-    * User
-    * Card
-    * Payment
+1. After reading the requirements from `https://gist.github.com/mattfonda/54375c58edebbc797a7f3b0b4bde1fe6`; I realized that there are two main resources
+    * Author
+    	- name
+    	- books (empty by default)
+    * Book
+    	- title
+    	- author
+    	- read (false by default)
   
     The resources are represented by there own classes in resources package
 2. Each resource gets their own service class where the application logic/ business logic is handled. Library is implemented as an orchestrator that uses other services. All services are found in service package
 3. Validators are run before creating and storing records in database. They are under validator package.
-4. Database is in memory which does not persist after the application is closed. Users and Cards are stored in maps while payments are stored in list.
+4. Database is in memory which does not persist after the application is closed.
 5. All commands and errors are available as string constants in constants package.
 6. Did not use any testing framework because the application was fairly simple to test. Tests are included in tests package.
 7. Scripts `library` and `library-test` simply run `headspace.jar` and `headspace-test.jar` respectively.
