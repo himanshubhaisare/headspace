@@ -44,10 +44,9 @@ public class Library {
 			if (command == null) {
                 result = COMMAND_NOT_RECOGNIZED;
             } else {
-				Database.lastCommand.setCommand(command);
                 switch (command) {
 					case Command.HELP:
-						result = "add \"$title\" \"$author\": adds a books to the library with the given title and author. All books are unread by default.\n" +
+						result = "\nadd \"$title\" \"$author\": adds a books to the library with the given title and author. All books are unread by default.\n" +
 								"read \"$title\": marks a given books as read.\n" +
 								"show all: displays all of the books in the library\n" +
 								"show unread: display all of the books that are unread\n" +
@@ -84,6 +83,8 @@ public class Library {
                         result = COMMAND_NOT_RECOGNIZED;
                         break;
                 }
+                // set last command
+                Database.lastCommand.setCommand(command);
             }
         }
 
@@ -106,7 +107,7 @@ public class Library {
 				result = this.bookService.unread(last.getBook());
 				break;
 			default:
-				result = Error.UNDO_FAILED;
+				result = Error.UNDO_FAILED + " " + last.getCommand() + "\n\n> ";
 				break;
 		}
 

@@ -39,6 +39,7 @@ public class BookService {
 
 		Database.addBook(book);
 		Database.addAuthor(author);
+
 		Database.lastCommand.setAuthor(author);
 		Database.lastCommand.setBook(book);
 
@@ -62,8 +63,13 @@ public class BookService {
 		result = (books.entrySet().stream().map(entry -> {
 			Book book = entry.getValue();
 			return String.format("\"%s\" by %s (%s)\n", book.getTitle(), book.getAuthor().getName(), book.getStatus());
-		})).reduce(String::concat).get();
+		})).reduce(String::concat).orElseGet(() -> "");
 
+		if (result.length() == 0) {
+			result = "No books found\n";
+		}
+
+		Database.lastCommand = new Last();
 		result = "\n" + result + "\n> ";
 		return result;
 	}
@@ -82,6 +88,11 @@ public class BookService {
 		}
 
 		Book book = Database.getBook(args[0]);
+		if (book == null) {
+			result = Error.TITLE_NOT_FOUND;
+			return result;
+		}
+
 		book.setRead(true);
 		Database.addBook(book);
 		Database.lastCommand.setBook(book);
@@ -99,6 +110,11 @@ public class BookService {
 	 */
 	public String delete(Book book) {
 		String result = "";
+		if (book == null) {
+			result = Error.TITLE_NOT_FOUND;
+			return result;
+		}
+
 		Author author = book.getAuthor();
 		Database.deleteBook(book);
 		List<Book> books = author.getBooks();
@@ -121,12 +137,17 @@ public class BookService {
 	 */
 	public String unread(Book book) {
 		String result = "";
+		if (book == null) {
+			result = Error.TITLE_NOT_FOUND;
+			return result;
+		}
+
 		book.setRead(false);
 		Database.addBook(book);
 
 		// clear last command
 		Database.lastCommand = new Last();
-		result = String.format("\n\"%s\" by %s marked as unread\n> ", book.getTitle(), book.getAuthor().getName());
+		result = String.format("\n\"%s\" by %s marked as unread\n\n> ", book.getTitle(), book.getAuthor().getName());
 		return result;
 	}
 }
