@@ -22,7 +22,7 @@ public class BookService {
     public String create(String[] args) {
         Book book;
         String result = "";
-        if (args.length < 2) {
+        if (args.length < 2 || args[0].isEmpty() || args[1].isEmpty()) {
             result = Error.INVALID_ARGS;
             return result;
         }
