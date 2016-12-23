@@ -2,8 +2,8 @@
 JRE 8. Download here if you dont have it https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html
 
 ## How to run application
-
-To start library in interactive mode just type `./library`
+Clone the repository on your local file system. cd into cloned source folder `cd your/path/headspce/src`
+Now start library in interactive mode just type `./library`
 
     $./library
     Welcome to your library!
@@ -22,8 +22,8 @@ To start library in interactive mode just type `./library`
     > 
 
 ## How to run tests
-
-    $./library-test
+Clone the repository on your local file system. cd into cloned source folder `cd your/path/headspce/src`
+Now start library in interactive mode just type `./library-test`
     
 ## Design decisions
 
