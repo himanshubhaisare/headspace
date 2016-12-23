@@ -12,6 +12,8 @@ public class Database {
 
     static Map<String, Book> books = new HashMap<String, Book>();
 
+	public static Last lastCommand = new Last();
+
     public static Map<String, Author> getAuthors() {
         return authors;
     }
@@ -28,6 +30,10 @@ public class Database {
         Database.authors.put(author.getName(), author);
     }
 
+    public static void deleteAuthor(Author author) {
+		Database.authors.remove(author.getName());
+	}
+
     public static Map<String, Book> getBooks() {
         return books;
     }
@@ -43,4 +49,8 @@ public class Database {
     public static void addBook(Book book) {
         Database.books.put(book.getTitle(), book);
     }
+
+    public static void deleteBook(Book book) {
+		Database.books.remove(book.getTitle());
+	}
 }

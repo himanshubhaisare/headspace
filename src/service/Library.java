@@ -1,6 +1,9 @@
 package service;
 
 import constants.Command;
+import constants.Error;
+import database.Database;
+import database.Last;
 
 import java.util.Arrays;
 
@@ -41,6 +44,7 @@ public class Library {
 			if (command == null) {
                 result = COMMAND_NOT_RECOGNIZED;
             } else {
+				Database.lastCommand.setCommand(command);
                 switch (command) {
 					case Command.HELP:
 						result = "add \"$title\" \"$author\": adds a books to the library with the given title and author. All books are unread by default.\n" +
@@ -74,7 +78,7 @@ public class Library {
 						result = this.bookService.read(args);
 						break;
 					case Command.UNDO:
-						result = this.authorService.create(args);
+						result = undo();
 						break;
                     default:
                         result = COMMAND_NOT_RECOGNIZED;
@@ -85,4 +89,27 @@ public class Library {
 
         return result;
     }
+
+	/**
+	 * Undo last mutational command
+	 *
+	 * @return
+	 */
+	public String undo() {
+		Last last = Database.lastCommand;
+		String result = "";
+		switch (last.getCommand()) {
+			case Command.ADD:
+				result = this.bookService.delete(last.getBook());
+				break;
+			case Command.READ:
+				result = this.bookService.unread(last.getBook());
+				break;
+			default:
+				result = Error.UNDO_FAILED;
+				break;
+		}
+
+		return result;
+	}
 }

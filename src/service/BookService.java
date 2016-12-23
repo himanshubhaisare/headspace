@@ -2,10 +2,12 @@ package service;
 
 import constants.Error;
 import database.Database;
+import database.Last;
 import resource.Author;
 import resource.Book;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BookService {
@@ -37,6 +39,8 @@ public class BookService {
 
 		Database.addBook(book);
 		Database.addAuthor(author);
+		Database.lastCommand.setAuthor(author);
+		Database.lastCommand.setBook(book);
 
 		result = String.format("\nAdded \"%s\" by %s\n\n> ", book.getTitle(), author.getName());
         return result;
@@ -64,10 +68,6 @@ public class BookService {
 		return result;
 	}
 
-	public String retrieveOne(String[] args) {
-		return null;
-	}
-
 	/**
 	 * Mark a book as read
 	 *
@@ -84,8 +84,49 @@ public class BookService {
 		Book book = Database.getBook(args[0]);
 		book.setRead(true);
 		Database.addBook(book);
+		Database.lastCommand.setBook(book);
+		Database.lastCommand.setAuthor(book.getAuthor());
 
 		result = String.format("\n\"%s\" by %s marked as read\n\n> ", book.getTitle(), book.getAuthor().getName());
+		return result;
+	}
+
+	/**
+	 * Delete book
+	 *
+	 * @param book
+	 * @return
+	 */
+	public String delete(Book book) {
+		String result = "";
+		Author author = book.getAuthor();
+		Database.deleteBook(book);
+		List<Book> books = author.getBooks();
+		books.remove(book);
+		if (books.isEmpty()) {
+			Database.deleteAuthor(author);
+		}
+
+		// clear last command
+		Database.lastCommand = new Last();
+		result = String.format("\nRemoved \"%s\" by David %s\n> ", book.getTitle(), author.getName());
+		return result;
+	}
+
+	/**
+	 * Mark book as unread
+	 *
+	 * @param book
+	 * @return
+	 */
+	public String unread(Book book) {
+		String result = "";
+		book.setRead(false);
+		Database.addBook(book);
+
+		// clear last command
+		Database.lastCommand = new Last();
+		result = String.format("\n\"%s\" by %s marked as unread\n> ", book.getTitle(), book.getAuthor().getName());
 		return result;
 	}
 }
