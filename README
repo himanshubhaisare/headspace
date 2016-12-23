@@ -3,31 +3,27 @@ JRE 8. Download here if you dont have it https://docs.oracle.com/javase/8/docs/t
 
 ## How to run application
 
-mini library supports two modes of execution. `cd` into the directory where you extracted the code and executable.
+To start library in interactive mode just type `./library`
 
-1. to start interactive mode just type `./library.sh`
-
-
-    $./library.sh
-    library started in interactive mode. Enter help to see manual.
+    $./library
+    Welcome to your library!
+    
     > help
-    user <name> : to create a user. e.g. user Himanshu
-    add <user> <card title> : to add a credit card on user. e.g. add Himanshu 5555555555554444 
-    balance <user> : to view balance of a user e.g. balance Himanshu 
-    pay <actor> <target> <$amount> <note> : pay someone e.g. pay Himanshu Lisa $10.50 for coffee 
-    feed <user> : shows activity feed of a user e.g. feed Himanshu 
-    help : brings up manual 
-    close : closes library
+    
+    add "$title" "$author": adds a books to the library with the given title and author. All books are unread by default.
+    read "$title": marks a given books as read.
+    show all: displays all of the books in the library
+    show unread: display all of the books that are unread
+    show all by "$author": shows all of the books in the library by the given author.
+    show unread by "$author": shows the unread books in the library by the given author
+    undo: undoes the last mutational command (if a books was marked as read it marks it as unread; if a books was added, it gets removed)
+    quit: quits the program.
+    
+    > 
 
-2. from a file of newline-delimited commands, when provided with one argument. Following example will accept input from input.txt file and will create output in a file named output.txt
-
-
-    $./library.sh input.txt
-   
 ## How to run tests
 
-
-    $./library-test.sh
+    $./library-test
     
 ## Design decisions
 
@@ -42,7 +38,7 @@ mini library supports two modes of execution. `cd` into the directory where you 
 4. Database is in memory which does not persist after the application is closed. Users and Cards are stored in maps while payments are stored in list.
 5. All commands and errors are available as string constants in constants package.
 6. Did not use any testing framework because the application was fairly simple to test. Tests are included in tests package.
-7. Scripts `library.sh` and `library-test.sh` simply run `library.jar` and `library-test.jar` respectively.
+7. Scripts `library` and `library-test` simply run `headspace.jar` and `headspace-test.jar` respectively.
 
 ## Choice of Language : Java
 Java runs on almost all environments. I used `java 8` for this project. I chose java because of I feel comfortable programming in java. It is a strongly typed, forces me to make less syntax errors and it supports both procedural as well as functional programming styles which gives me more flexibility as a programmer. 
