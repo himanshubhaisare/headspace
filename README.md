@@ -27,7 +27,7 @@ To start library in interactive mode just type `./library`
     
 ## Design decisions
 
-1. After reading the requirements from `https://gist.github.com/mattfonda/54375c58edebbc797a7f3b0b4bde1fe6`; I realized that there are two main resources
+1. After reading the requirements from https://gist.github.com/mattfonda/54375c58edebbc797a7f3b0b4bde1fe6; I realized that there are two main resources
     * Author
     	- name
     	- books (empty by default)
