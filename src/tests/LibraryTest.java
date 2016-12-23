@@ -69,8 +69,6 @@ public class LibraryTest {
         testAddCardWithoutUser();
         testAddCardOnNonExistingUser();
         testAddCardWithUser();
-        testAddSecondCardOnUser();
-        testAddAnotherUsersCard();
 
         // 3. balance shows user's balance
         testBalanceWithoutUser();
@@ -226,33 +224,6 @@ public class LibraryTest {
         } else {
             System.out.println(CHECK_BALANCE_WITHOUT_USER+" : FAIL");
         }
-    }
-
-    private void testAddAnotherUsersCard() {
-        library.handle("user Himanshu");
-        library.handle("add Himanshu 5454545454545454");
-        library.handle("user Milana");
-        String result = library.handle("add Milana 5454545454545454");
-        if (result.contains(Error.TITLE_BELONGS_TO_ANOTHER_AUTHOR)) {
-            System.out.println(ADD_ANOTHER_USERS_CARD+" Milana 5454545454545454 : PASS");
-        } else {
-            System.out.println(ADD_ANOTHER_USERS_CARD+" Milana 5454545454545454 : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testAddSecondCardOnUser() {
-        library.handle("user Himanshu");
-        library.handle("add Himanshu 5454545454545454");
-        String result = library.handle("add Himanshu 4111111111111111");
-        if (result.contains(Error.AUTHOR_ALREADY_HAS_BOOK)) {
-            System.out.println(ADD_SECOND_CARD+" Himanshu 4111111111111111 : PASS");
-        } else {
-            System.out.println(ADD_SECOND_CARD+" Himanshu 4111111111111111 : FAIL");
-        }
-
-        clear();
     }
 
     private void testAddCardWithUser() {

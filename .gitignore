@@ -51,7 +51,7 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
 
@@ -86,3 +86,4 @@ Temporary Items
 
 .gitignore
 out/
+src/META-INF/
