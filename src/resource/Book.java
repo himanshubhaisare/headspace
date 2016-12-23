@@ -2,11 +2,11 @@ package resource;
 
 public class Book {
 
-    public String title;
+    private String title;
 
-    public Author author;
+    private Author author;
 
-	public Boolean read;
+	private Boolean read;
 
     public Book(String title, Author author) {
         this.title = title;
@@ -32,6 +32,10 @@ public class Book {
 
 	public Boolean getRead() {
 		return read;
+	}
+
+	public Boolean isUnread() {
+		return !read;
 	}
 
 	public void setRead(Boolean read) {

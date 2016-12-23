@@ -2,11 +2,9 @@ package service;
 
 import constants.Error;
 import database.Database;
-import database.Last;
 import resource.Author;
 import resource.Book;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,28 +46,25 @@ public class BookService {
     }
 
 	/**
-	 * Retrieve books from library
+	 * Retrieve all books from library
 	 *
-	 * @param args
 	 * @return
 	 */
-	public String retrieve(String[] args) {
+	public String retrieve() {
 		String result = "";
-		Map<String, Book> books = new HashMap<>();
-		if (args.length == 0) {
-			books = Database.getBooks();
-		}
+		Map<String, Book> books = Database.getBooks();
 
-		result = (books.entrySet().stream().map(entry -> {
-			Book book = entry.getValue();
-			return String.format("\"%s\" by %s (%s)\n", book.getTitle(), book.getAuthor().getName(), book.getStatus());
-		})).reduce(String::concat).orElseGet(() -> "");
+		result = books.entrySet().stream()
+				.map(book -> String.format("\"%s\" by %s (%s)\n",
+						book.getValue().getTitle(),
+						book.getValue().getAuthor().getName(),
+						book.getValue().getStatus()))
+				.reduce(String::concat).orElseGet(() -> "");
 
 		if (result.length() == 0) {
 			result = "No books found\n";
 		}
 
-		Database.lastCommand = new Last();
 		result = "\n" + result + "\n> ";
 		return result;
 	}
@@ -123,9 +118,7 @@ public class BookService {
 			Database.deleteAuthor(author);
 		}
 
-		// clear last command
-		Database.lastCommand = new Last();
-		result = String.format("\nRemoved \"%s\" by David %s\n> ", book.getTitle(), author.getName());
+		result = String.format("\nRemoved \"%s\" by %s\n\n> ", book.getTitle(), author.getName());
 		return result;
 	}
 
@@ -145,9 +138,33 @@ public class BookService {
 		book.setRead(false);
 		Database.addBook(book);
 
-		// clear last command
-		Database.lastCommand = new Last();
 		result = String.format("\n\"%s\" by %s marked as unread\n\n> ", book.getTitle(), book.getAuthor().getName());
+		return result;
+	}
+
+	/**
+	 * Retrieve all unread books
+	 *
+	 * @return
+	 */
+	public String retrieveUnreadBooks() {
+		String result = "";
+		Map<String, Book> books = Database.getBooks();
+
+		result = books.entrySet().stream()
+				.filter(book -> book.getValue().isUnread())
+				.map(book ->
+						String.format("\"%s\" by %s (%s)\n",
+								book.getValue().getTitle(),
+								book.getValue().getAuthor().getName(),
+								book.getValue().getStatus()))
+				.reduce(String::concat).orElseGet(() -> "");
+
+		if (result.length() == 0) {
+			result = String.format("No unread books found\n");
+		}
+
+		result = "\n" + result + "\n> ";
 		return result;
 	}
 }

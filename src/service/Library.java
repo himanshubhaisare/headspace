@@ -62,16 +62,16 @@ public class Library {
                         result = this.bookService.create(args);
                         break;
                     case Command.SHOW_ALL:
-                        result = this.bookService.retrieve(args);
+                        result = this.bookService.retrieve();
                         break;
                     case Command.SHOW_ALL_BY:
-                        result = this.authorService.create(args);
+                        result = this.authorService.retrieveBooks(args);
                         break;
 					case Command.SHOW_UNREAD:
-						result = this.authorService.create(args);
+						result = this.bookService.retrieveUnreadBooks();
 						break;
 					case Command.SHOW_UNREAD_BY:
-						result = this.authorService.create(args);
+						result = this.authorService.retrieveUnreadBooks(args);
 						break;
 					case Command.READ:
 						result = this.bookService.read(args);
@@ -83,6 +83,7 @@ public class Library {
                         result = COMMAND_NOT_RECOGNIZED;
                         break;
                 }
+
                 // set last command
                 Database.lastCommand.setCommand(command);
             }
