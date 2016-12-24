@@ -75,7 +75,7 @@ public class AuthorService {
 				.reduce(String::concat).orElseGet(() -> "");
 
 		if (result.length() == 0) {
-			result = String.format("No unread books found by %s\n", author.getName());
+			result = String.format("No unread books found by \"%s\"\n", author.getName());
 		}
 
 		result = "\n" + result + "\n> ";

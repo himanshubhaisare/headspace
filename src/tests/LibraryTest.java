@@ -22,10 +22,16 @@ public class LibraryTest {
 	private static final String SHOW_ALL_SUCCESS = "show all returns all books in library";
     private static final String SHOW_UNREAD_ON_EMPTY_LIBRARY = "show unread on empty library returns No unread books found";
     private static final String SHOW_UNREAD = "show unread returns all unread titles";
-    private static final String SHOW_FEED_WITHOUT_ARGS = "test cannot show feed without any arguments";
-    private static final String SHOW_FEED_FOR_NON_EXISTING_USER = "test cannot show feed for a user that does not exist";
-    private static final String SHOW_FEED = "test show feed works";
+    private static final String SHOW_ALL_BY_WITHOUT_ARGS = "show all by without arguments returns error";
+    private static final String SHOW_ALL_BY_AUTHOR_WITH_NO_TITLES = "show all by author with no titles returns error";
+    private static final String SHOW_ALL_BY_AUTHOR_WITH_TITLES = "show all by author name returns list of titles for that author";
 	private static final String ADD_WITHOUT_AUTHOR = "add title without author returns error";
+	private static final String SHOW_UNREAD_BY_WITHOUT_ARGS = "show unread by without args returns error";
+	private static final String SHOW_UNREAD_BY_AUTHOR_WITH_READ_TITLES = "show unread by author with read titles doesn't return unread titles";
+	private static final String SHOW_UNREAD_BY_AUTHOR_WITH_UNREAD_TITLES = "show unread by author with unread titles returns unread titles";
+	private static final String UNDO_LAST_MUTATIONAL_COMMAND = "undo last add command removed the added title from library";
+	private static final String UNDO_LAST_NON_MUTATIONAL_COMMAND = "undo last non mutational command like \"read\" returns error";
+	private static final String QUIT_SAYS_BYE = "quit command says Bye! before ending the program";
 
 	private Library library;
 
@@ -68,44 +74,92 @@ public class LibraryTest {
 
         // 5. test "show all by" command
         testShowAllByWithoutArgs();
-        testShowAllByEmptyAuthorName();
-        testShowAllByAuthorName();
+        testShowAllByAuthorWithNoTitles();
+        testShowAllByAuthorWithTitles();
 
 		// 6. test "show unread by" command
 		testShowUnreadByWithoutArgs();
-		testShowUnreadByEmptyAuthorName();
-		testShowUnreadByAuthorName();
+		testShowUnreadByAuthorWithReadTitles();
+		testShowUnreadByAuthorWithUnreadTitles();
 
 		// 7. test "undo" command
-		testUndoMurtationalLastCommand();
-		testUndoNonMurtationalLastCommand();
+		testUndoMutationalLastCommand();
+		testUndoNonMutationalLastCommand();
 
-		// 5. test "quit" command
+		// 8. test "quit" command
 		testQuit();
     }
 
 	private void testQuit() {
+		String result = library.handle("quit");
+		if (result.contains("Bye!")) {
+			System.out.println(QUIT_SAYS_BYE +" : PASS");
+		} else {
+			System.out.println(QUIT_SAYS_BYE +" : FAIL");
+		}
 
+		clear();
 	}
 
-	private void testUndoNonMurtationalLastCommand() {
+	private void testUndoNonMutationalLastCommand() {
+		library.handle("add \"The Grapes of Wrath\" \"John Steinbeck\"");
+		library.handle("show read");
+		String result = library.undo();
+		if (result.contains(Error.UNDO_FAILED)) {
+			System.out.println(UNDO_LAST_NON_MUTATIONAL_COMMAND +" : PASS");
+		} else {
+			System.out.println(UNDO_LAST_NON_MUTATIONAL_COMMAND +" : FAIL");
+		}
 
+		clear();
 	}
 
-	private void testUndoMurtationalLastCommand() {
+	private void testUndoMutationalLastCommand() {
+		library.handle("add \"The Grapes of Wrath\" \"John Steinbeck\"");
+		String result = library.undo();
+		if (result.contains("Removed \"The Grapes of Wrath\" by John Steinbeck\n")) {
+			System.out.println(UNDO_LAST_MUTATIONAL_COMMAND +" : PASS");
+		} else {
+			System.out.println(UNDO_LAST_MUTATIONAL_COMMAND +" : FAIL");
+		}
 
+		clear();
 	}
 
-	private void testShowUnreadByAuthorName() {
+	private void testShowUnreadByAuthorWithUnreadTitles() {
+		library.handle("add \"The Grapes of Wrath\" \"John Steinbeck\"");
+		String result = library.handle("show unread by \"John Steinbeck\"");
+		if (result.contains("\"The Grapes of Wrath\" by John Steinbeck (unread)")) {
+			System.out.println(SHOW_UNREAD_BY_AUTHOR_WITH_UNREAD_TITLES +" : PASS");
+		} else {
+			System.out.println(SHOW_UNREAD_BY_AUTHOR_WITH_UNREAD_TITLES +" : FAIL");
+		}
 
+		clear();
 	}
 
-	private void testShowUnreadByEmptyAuthorName() {
+	private void testShowUnreadByAuthorWithReadTitles() {
+		library.handle("add \"The Grapes of Wrath\" \"John Steinbeck\"");
+		library.handle("read \"The Grapes of Wrath\"");
+		String result = library.handle("show unread by \"John Steinbeck\"");
+		if (result.contains("No unread books found by \"John Steinbeck\"")) {
+			System.out.println(SHOW_UNREAD_BY_AUTHOR_WITH_READ_TITLES +" : PASS");
+		} else {
+			System.out.println(SHOW_UNREAD_BY_AUTHOR_WITH_READ_TITLES +" : FAIL");
+		}
 
+		clear();
 	}
 
 	private void testShowUnreadByWithoutArgs() {
+		String result = library.handle("show unread by");
+		if (result.contains(Error.INVALID_ARGS)) {
+			System.out.println(SHOW_UNREAD_BY_WITHOUT_ARGS +" : PASS");
+		} else {
+			System.out.println(SHOW_UNREAD_BY_WITHOUT_ARGS +" : FAIL");
+		}
 
+		clear();
 	}
 
 	private void testCorrectCommand() {
@@ -117,42 +171,33 @@ public class LibraryTest {
 		}
 	}
 
-	private void testShowAllByAuthorName() {
-        library.handle("user Himanshu");
-        library.handle("add Himanshu 5454545454545454");
-        library.handle("user Milana");
-        library.handle("user John");
-        library.handle("user Newton");
-        library.handle("pay Himanshu Milana $3.14 pie");
-        library.handle("pay Himanshu John $3.14 pie");
-        library.handle("pay Himanshu Newton $9.81 gravity");
-        String result = library.handle("feed Himanshu");
-        if (result.contains("You paid Milana $3.14 for pie") &&
-            result.contains("You paid John $3.14 for pie") &&
-            result.contains("You paid Newton $9.81 for gravity")) {
-            System.out.println(SHOW_FEED+" : PASS");
+	private void testShowAllByAuthorWithTitles() {
+		library.handle("add \"The Grapes of Wrath\" \"John Steinbeck\"");
+        String result = library.handle("show all by \"John Steinbeck\"");
+        if (result.contains("\"The Grapes of Wrath\" by John Steinbeck (unread)")) {
+            System.out.println(SHOW_ALL_BY_AUTHOR_WITH_TITLES +" : PASS");
         } else {
-            System.out.println(SHOW_FEED+" : FAIL");
+            System.out.println(SHOW_ALL_BY_AUTHOR_WITH_TITLES +" : FAIL");
         }
 
         clear();
     }
 
-    private void testShowAllByEmptyAuthorName() {
-        String result = library.handle("feed Himanshu");
-        if (result.equals(Error.AUTHOR_NOT_FOUND)) {
-            System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : PASS");
+    private void testShowAllByAuthorWithNoTitles() {
+        String result = library.handle("show all by \"Himanshu Bhaisare\"");
+        if (result.contains(Error.AUTHOR_NOT_FOUND)) {
+            System.out.println(SHOW_ALL_BY_AUTHOR_WITH_NO_TITLES +" : PASS");
         } else {
-            System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : FAIL");
+            System.out.println(SHOW_ALL_BY_AUTHOR_WITH_NO_TITLES +" : FAIL");
         }
     }
 
     private void testShowAllByWithoutArgs() {
-        String result = library.handle("feed");
+        String result = library.handle("show all by");
         if (result.equals(Error.INVALID_ARGS)) {
-            System.out.println(SHOW_FEED_WITHOUT_ARGS+" : PASS");
+            System.out.println(SHOW_ALL_BY_WITHOUT_ARGS +" : PASS");
         } else {
-            System.out.println(SHOW_FEED_WITHOUT_ARGS+" : FAIL");
+            System.out.println(SHOW_ALL_BY_WITHOUT_ARGS +" : FAIL");
         }
     }
 
